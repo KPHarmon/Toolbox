@@ -1,16 +1,21 @@
 #include <stdlib.h>
+#include <string.h>
 #include <stdio.h>
-#include "md5.h"
+#include <openssl/md5.h"
+
+//#include <openssl/md5.h>
 #define HASHSIZE 33
 #define LISTSIZE 1
 
+int crackHash(FILE *, char *);
+
 int main(){
 	int i = 0;
-    char result[HASHSIZE]
+	char result[HASHSIZE];
     char targetHash[HASHSIZE];
     char passwords[HASHSIZE];
     char lists[LISTSIZE][HASHSIZE];
-    lists[i] = "/lists/rockyou.txt";
+    strcpy(lists[i], "/lists/rockyou.txt");
     FILE *fp;
     int flag = 0;
     printf("Insert your MD5 Hash: ");
@@ -20,7 +25,7 @@ int main(){
         fp = fopen(lists[i], "r");
         flag = crackHash(fp, targetHash);
         if(flag == 1){
-            return 0
+			return 0;
         }
     }
     system("COLOR 3");
@@ -30,11 +35,9 @@ int main(){
 
 int crackHash(FILE *fp, char *targetHash){
     while(fp != NULL){
-		char hash[40];
-        fscanf(fp, "%s", &hash);
-		char* data = hash;
-		char* value = GetMD5String(data, 40);
-        if(targetHash == hash){
+		char password[40];
+        fscanf(fp, "%s", &password);
+        if(targetHash == password){
             system("COLOR 5");
             printf("\nFOUND\n");
             printf("Hash: %s", targetHash);
